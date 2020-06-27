@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.cjz.order.R;
 import com.cjz.order.activity.SearchResultActivity;
+import com.cjz.order.activity.ShopActivity;
 import com.cjz.order.bean.FoodBean;
 import com.cjz.order.bean.ShopBean;
 
@@ -30,13 +31,21 @@ public class SearchActivity extends AppCompatActivity {
     }
 
     protected void initData() {
-        String shareData = "澳洲美食,长沙美食,韩国料理,日本料理,舌尖上的中国,意大利餐,山西菜";
-        List<String> skills = Arrays.asList(shareData.split(","));
+        if (ShopActivity.history_search == null || ShopActivity.history_search.size() == 0){
+            ShopActivity.history_search = new ArrayList<>();
+            ShopActivity.history_search.add("澳洲美食");
+            ShopActivity.history_search.add("长沙美食");
+            ShopActivity.history_search.add("韩国料理");
+            ShopActivity.history_search.add("日本料理");
+            ShopActivity.history_search.add("舌尖上的中国");
+            ShopActivity.history_search.add("意大利餐");
+            ShopActivity.history_search.add("山西菜");
+        }
 
         String shareHotData ="粤菜,浙菜,苏菜";
         List<String> skillHots = Arrays.asList(shareHotData.split(","));
 
-        msearchLy.initData(skills, skillHots, new SearchLayout.setSearchCallBackListener() {
+        msearchLy.initData(ShopActivity.history_search, skillHots, new SearchLayout.setSearchCallBackListener() {
             @Override
             public void Search(String str) {
                 shopBeans2 = new ArrayList<>();
@@ -69,10 +78,12 @@ public class SearchActivity extends AppCompatActivity {
             @Override
             public void ClearOldData() {
                 //清除历史搜索记录  更新记录原始数据
+                ShopActivity.history_search.clear();
             }
             @Override
             public void SaveOldData(ArrayList<String> AlloldDataList) {
                 //保存所有的搜索记录
+                ShopActivity.history_search = AlloldDataList;
             }
         });
     }

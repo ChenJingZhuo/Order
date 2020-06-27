@@ -58,6 +58,8 @@ public class ShopActivity extends AppCompatActivity {
     private RelativeLayout rl_title_bar;
     private ImageView mIvSearch;
 
+    public static List<String> history_search; //历史记录
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
