@@ -1,20 +1,34 @@
 package com.cjz.order.activity;
 
 import android.app.Dialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.cjz.order.R;
 import com.cjz.order.adapter.OrderAdapter;
 import com.cjz.order.bean.FoodBean;
+import com.cjz.order.utils.MyOk;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.Response;
 
 public class OrderActivity extends AppCompatActivity {
     private ListView lv_order;
@@ -62,12 +76,56 @@ public class OrderActivity extends AppCompatActivity {
         tv_payment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) { //“去支付”按钮的点击事件
-                Dialog dialog = new Dialog(OrderActivity.this, R.style.Dialog_Style);
+                final Dialog dialog = new Dialog(OrderActivity.this, R.style.Dialog_Style);
                 dialog.setContentView(R.layout.qr_code);
+                dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                    @Override
+                    public void onDismiss(DialogInterface dialog) {
+                        if (timer!=null){
+                            timer.cancel();
+                        }
+                    }
+                });
                 dialog.show();
+                timer = new Timer();
+                timer.schedule(new TimerTask() {
+                    @Override
+                    public void run() {
+                        MyOk.get("SuccessServlet", new Callback() {
+                            @Override
+                            public void onFailure(Call call, IOException e) {
+
+                            }
+
+                            @Override
+                            public void onResponse(Call call, Response response) throws IOException {
+                                try {
+                                    JSONObject jsonObject = new JSONObject(response.body().string());
+                                    String pay = jsonObject.getString("pay");
+                                    if (pay.equals("success")){
+                                        runOnUiThread(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                Toast.makeText(OrderActivity.this, "扫描并支付成功", Toast.LENGTH_LONG).show();
+                                            }
+                                        });
+                                        dialog.dismiss();
+                                        timer.cancel();
+                                        timer=null;
+                                        startActivity(new Intent(OrderActivity.this,PaySuccessActivity.class));
+                                        OrderActivity.this.finish();
+                                    }
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        });
+                    }
+                },2000,1000);
             }
         });
     }
+    private Timer timer;
     /**
      * 设置界面数据
      */

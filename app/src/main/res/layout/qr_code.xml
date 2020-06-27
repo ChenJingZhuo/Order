@@ -12,8 +12,8 @@
         android:textColor="@android:color/white"
         android:textSize="16sp" />
     <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
         android:scaleType="fitXY"
-        android:src="@drawable/qr_code" />
+        android:src="@drawable/qrcode_1593271434993" />
 </LinearLayout>

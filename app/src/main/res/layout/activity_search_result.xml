@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@android:color/white"
+    tools:context=".activity.SearchResultActivity">
+
+    <include layout="@layout/title_bar"/>
+
+    <TextView
+        android:id="@+id/tv_tip"
+        android:text="未找到符合条件的店铺"
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:textColor="#f00"
+        android:layout_height="50dp"/>
+
+    <com.cjz.order.views.ShopListView
+        android:id="@+id/slv_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="8dp"
+        android:dividerHeight="8dp"
+        android:scrollbars="none" />
+
+</LinearLayout>
